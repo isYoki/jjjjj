@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+      *{margin: 0; padding: 0; border: 0; list-style: none}
+        .box{
+            width: 100%;
+            height: 650px;
+            overflow: hidden;
+        }
+        ul{
+            width: 500%;
+            height: 650px;
+            position: relative;
+            z-index: 1;
+        }
+
+        ul li{
+            width: 20%;
+            height: 650px;
+            float: left;
+        }
+      ul li img{
+          width: 100%;
+          height: 650px;
+      }
+        .box p{
+            position: absolute;
+            width: 80%;
+            height: 100px;
+            left:50%;
+            margin-left:-40%;
+            margin-top: 100px;
+            font-size: 130px;
+            color: #fff;
+            line-height: 100px;
+            z-index: 2;
+
+        }
+        .box span{
+            background: pink;
+        }
+      .box p span:nth-child(2){
+          float: right;
+
+      }
+
+    </style>
+
+    <script src='JS/jquery-1.9.1.js'></script>
+        <script>
+            $(function () {
+                var tag = $('li:first').clone();
+                $('ul').append(tag);
+                var length = $('li').length;
+
+                /*记录当前的位置*/
+                var cur_index = 0;
+                /*程序一进入，就开始滚动*/
+                var timer;
+                function auto_play() {
+                    timer = setInterval(function () {
+
+                       play(0);
+                    },1000);
+                }
+                auto_play();
+
+
+                /*监听右侧按钮的点击*/
+                $('p span:last').click(function () {
+
+                  play(0);
+
+                });
+
+                $('p span:first').click(function () {
+
+                   play(1);
+
+                });
+
+                /*
+                * 根据指定的方向 ，进行前进，后退
+                * 如果：dir = 0 ,代表前进，dir = 1 代表后退
+                * */
+                function play(dir) {
+                    if(dir == 0){
+                        cur_index++;
+                        if (cur_index >= length){
+
+                            $('ul').css({
+                                left: 0
+                            });
+                            cur_index = 1;
+                        }
+
+                        $('ul').animate({
+                            left : -(cur_index*100)+'%'
+                        });
+                    }else if(dir == 1){
+                        cur_index--;
+                        if(cur_index<0){
+                            /*设置位置*/
+                            /*调整ul的位置 */
+                            $('ul').css({
+                                left: -((length-1) * 100)+'%'
+                            });
+                            cur_index  = length - 2;
+                        }
+                        $('ul').animate({
+                            left : -(cur_index*100)+'%'
+                        });
+
+                    }else {
+                        alert('传参错误');
+                    }
+                }
+
+                $('.box').hover(function () {
+                   /*清除定时器*/
+                    clearInterval(timer);
+
+                },function () {
+                    /*添加定时器*/
+                    auto_play();
+                });
+
+            });
+        </script>
+
+
+</head>
+<body>
+
+<div class="box">
+
+    <p><span>&lt;</span> <span>&gt;</span></p>
+
+    <ul>
+        <li><img src="img/3f203aa6431d3398.jpg" alt=""></li>
+        <li><img src="img/918e2ba687205963.jpg" alt=""></li>
+        <li><img src="img/7396cb8e46de9c6b.jpg" alt=""></li>
+    </ul>
+
+</div>
+
+
+</body>
+</html>
